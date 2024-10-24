@@ -86,6 +86,30 @@ section {
     transform: translateY(0) scaleY(1);
   }
 }
+@keyframes decoratorScroll {
+    0% {
+        transform: translateY(-66.66%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+@keyframes slideImages {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-50%);
+    }
+}
+@keyframes borderPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
 
 .controls {
   position: fixed;
@@ -403,15 +427,6 @@ section {
   color: var(--color-grey-2);
 }
 
-@keyframes decoratorScroll {
-    0% {
-        transform: translateY(-66.66%);
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
-
 /* Adding a pulsing border effect */
 .portfolio-item.expanded::after {
     content: '';
@@ -421,15 +436,6 @@ section {
     border-radius: inherit;
     animation: borderPulse 2s ease-in-out infinite;
     pointer-events: none;
-}
-
-@keyframes borderPulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
 }
 
 .port-text {
@@ -492,21 +498,58 @@ section {
     position: absolute;
     inset: 0;
     background: var(--color-primary);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--color-white);
-    padding: 2rem;
     opacity: 0;
     pointer-events: none;
     transform: translateY(100%);
     transition: all 0.4s ease-in-out;
+    display: flex;
+    border: 3px solid var(--color-secondary);
+    overflow: hidden;
+}
+.details-container {
+    flex: 1;
+    padding: 2rem;
+    max-width: 70%;
+}
+
+.image-slideshow {
+    width: 30%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative;
+}
+
+.slideshow-container {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    animation: slideImages 20s linear infinite;
+}
+
+.slideshow-container img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.slideshow-container img:hover {
+    opacity: 1;
 }
 
 .portfolio-item.expanded {
     grid-column: span 3;
     height: 70vh;
-    border: 3px solid var(--color-secondary);
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
-    position: relative;
+}
+
+.portfolio-item.expanded .project-details {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
 }
 
 .portfolio-item.expanded .project-details {
@@ -629,6 +672,10 @@ section {
 
 .right-decorator::before {
     animation-direction: reverse;
+}
+
+.portfolio-item.expanded .slideshow-container:hover {
+    animation-play-state: paused;
 }
 
 .blogs {
@@ -1118,6 +1165,36 @@ section {
   .main-title h2 .bg-text {
     font-size: 4rem;
   }
+}
+
+@media screen and (max-width: 1250px) {
+    .details-container {
+        max-width: 60%;
+    }
+    
+    .image-slideshow {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .project-details {
+        flex-direction: column;
+    }
+    
+    .details-container {
+        max-width: 100%;
+        padding: 1.5rem;
+    }
+    
+    .image-slideshow {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .slideshow-container img {
+        height: 200px;
+    }
 }
 
 /*# sourceMappingURL=styles.css.map */
