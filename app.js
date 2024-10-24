@@ -10,8 +10,33 @@
     document.querySelector(".theme-btn").addEventListener("click", () => {
         document.body.classList.toggle("light-mode");
     })
+
+    function setupSlideshows() {
+        const slideshowContainers = document.querySelectorAll('.slideshow-container');
+        
+        slideshowContainers.forEach(container => {
+            const images = container.querySelectorAll('img');
+            // Clone images and append them to create seamless loop
+            images.forEach(img => {
+                const clone = img.cloneNode(true);
+                container.appendChild(clone);
+            });
+        });
+    }
+
+    
+    window.addEventListener('load', setupSlideshows);
+    
     const portfolioGrid = document.getElementById('portfolio-grid');
     const portfolioItems = document.querySelectorAll('.portfolio-item');
+    const slideshowContainers = document.querySelectorAll('.slideshow-container');
+    slideshowContainers.forEach(container => {
+        container.addEventListener('animationend', () => {
+            container.style.animation = 'none';
+            container.offsetHeight; // Trigger reflow
+            container.style.animation = null;
+        });
+    });
 
     portfolioItems.forEach(item => {
         // Add click listener to the overlay
