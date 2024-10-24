@@ -17,6 +17,28 @@
         // Add click listener to the overlay
         const overlay = item.querySelector('.project-overlay');
         overlay.addEventListener('click', () => {
+            if (!item.classList.contains('expanded')) {
+            // Add slide-in animation class
+            item.classList.add('slide-in');
+            
+            // Remove expanded class from all items
+            portfolioItems.forEach(p => {
+                p.classList.remove('expanded');
+                p.classList.add('collapsed');
+            });
+            
+            // Add expanded class to clicked item
+            item.classList.remove('collapsed');
+            item.classList.add('expanded');
+            
+            // Trigger side decorator animations
+            const decorators = item.querySelectorAll('.side-decorator');
+            decorators.forEach(decorator => {
+                decorator.style.animation = 'none';
+                decorator.offsetHeight; // Trigger reflow
+                decorator.style.animation = null;
+            });
+        }
             // Remove expanded class from all items
             portfolioItems.forEach(p => {
                 p.classList.remove('expanded');
