@@ -23,7 +23,7 @@
 
 .light-mode {
     --color-primary: #FFFFFF;
-    --color-secondary: #F56692;
+    --color-secondary: #7a0185;
     --color-white: #454e56;
     --color-black: #000;
     --color-grey0: #f8f8f8;
@@ -298,12 +298,14 @@ section {
                         transition: all .4s ease-in-out;
                         width: 60%;
                     }
-                    .html { width: 80%; }
-                    .css { width: 95%; }
-                    .js { width: 75%; }
-                    .react{ width: 60%; }
-                    .node{ width: 87%; }
+                    .java { width: 80%; }
+                    .cpp { width: 70%; }
+                    .js { width: 60%; }
+                    .react{ width: 65%; }
+                    .csharp{ width: 60%; }
+                    .node{ width: 60%; }
                     .python{ width: 70%; }
+                    .ue{ width: 90%; }
                 }
             }
         }
@@ -390,7 +392,7 @@ section {
         border-radius: 15px;
         img {
             width: 100%;
-            height: 300px;
+            height: 800px;
             object-fit: cover;
             border-radius: 15px;
         }
@@ -446,7 +448,7 @@ section {
 
 .portfolio-item:hover .hover-items {
     opacity: 1;
-    transform: scale(3);
+    transform: scale(1);
 }
 
 //Blogs Section
