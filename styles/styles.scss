@@ -377,6 +377,40 @@ section {
 }
 
 //Portfolios
+
+@keyframes appear {
+  0% {
+    transform: translateY(-100%) scaleY(0);
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+}
+@keyframes decoratorScroll {
+    0% {
+        transform: translateY(-66.66%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+@keyframes slideImages {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-50%);
+    }
+}
+@keyframes borderPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
 .portfolios {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
