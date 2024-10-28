@@ -347,8 +347,8 @@ section {
 .about-stats .progress-bars .progress-bar .progress-con .progress .csharp {
   width: 60%;
 }
-.about-stats .progress-bars .progress-bar .progress-con .progress .node {
-  width: 60%;
+.about-stats .progress-bars .progress-bar .progress-con .progress .blender {
+  width: 75%;
 }
 .about-stats .progress-bars .progress-bar .progress-con .progress .python {
   width: 70%;
