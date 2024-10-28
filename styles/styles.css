@@ -1285,7 +1285,7 @@ section {
     font-size: 2.3rem;
   }
 }
-@media screen and (max-width: 2050px) {
+@media screen and (max-width: 4050px) {
   .blogs {
     grid-template-columns: repeat(2, 1fr);
     margin-top: 6rem;
@@ -1306,7 +1306,7 @@ section {
   }
 }
 
-@media screen and (max-width: 4200px) {
+@media screen and (max-width: 2000px) {
     .details-container {
         max-width: 60%;
     }
