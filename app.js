@@ -23,24 +23,6 @@
             });
         });
     }
-
-    function openModal() {
-            document.getElementById("myModal").style.display = "block";
-        }
-
-        // Funkce pro zavření modalu
-        function closeModal() {
-            document.getElementById("myModal").style.display = "none";
-        }
-
-        // Zavření modalu kliknutím mimo obsah
-        window.onclick = function(event) {
-            let modal = document.getElementById("myModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    window.addEventListener('load', setupSlideshows);
     
     const portfolioGrid = document.getElementById('portfolio-grid');
     const portfolioItems = document.querySelectorAll('.portfolio-item');
