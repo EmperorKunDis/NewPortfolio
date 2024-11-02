@@ -21,18 +21,18 @@ A modern, interactive portfolio website built with vanilla JavaScript and hosted
 
 ## 🚀 Live Demo
 
-[View Live Demo](https://your-portfolio-url.vercel.app)
+[View Live Demo](https://martin-svanda-portfolio.vercel.app)
 
 ## 💻 Installation & Setup
 
 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/portfolio-website.git
+git clone https://github.com/EmperorKunDis/NewPortfolio.git
 ```
 
 2. Navigate to the project directory
 ```bash
-cd portfolio-website
+cd NewPortfolio
 ```
 
 3. Open `index.html` in your browser or use a local server
