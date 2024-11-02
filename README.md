@@ -101,6 +101,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## 📞 Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_twitter)
+Martin Švanda - [@Martinvanda16]([https://x.com/Martinvanda16])
 
-Project Link: [https://github.com/your-username/portfolio-website](https://github.com/your-username/portfolio-website)
+Project Link: [https://github.com/EmperorKunDis/NewPortfolio](https://github.com/EmperorKunDis/NewPortfolio)
