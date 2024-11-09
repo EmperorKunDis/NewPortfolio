@@ -847,7 +847,7 @@ section {
 }
 }
 .main-btn .btn-text {
-  padding: 2 2rem;
+  padding: 0 5rem;
 }
 .main-btn .btn-icon {
   background-color: var(--color-secondary);
