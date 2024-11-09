@@ -63,6 +63,7 @@
     margin: 10px;
     cursor: pointer;
     transition: transform 0.2s;
+    border: 2px solid currentColor;
 }
 
 .element-shape:hover {
@@ -96,6 +97,8 @@
     position: absolute;
     pointer-events: none;
     z-index: 5;
+    transform-origin: left center;
+    height: 0;
 }
 
 .connection-line.solid {
@@ -122,6 +125,11 @@
     border-bottom: 6px solid transparent;
 }
 
+.temp-connection {
+    border-top: 2px dashed #666;
+    opacity: 0.5;
+}
+
 .tooltip-content {
     position: absolute;
     background: white;
@@ -143,7 +151,24 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     z-index: 1000;
-    display: none;
+    min-width: 400px;
+    min-height: 300px;
+}
+
+.modal-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-workspace {
+    flex: 1;
+    position: relative;
+    min-height: 200px;
+    background: #fafafa;
+    border: 1px solid #eee;
+    margin: 10px 0;
+    border-radius: 4px;
 }
 
 .color-picker {
@@ -151,6 +176,9 @@
     flex-wrap: wrap;
     gap: 5px;
     margin: 10px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
 }
 
 .color-option {
@@ -159,6 +187,7 @@
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid transparent;
+    transition: transform 0.2s;
 }
 
 .color-option:hover {
@@ -169,24 +198,44 @@
     border-color: #000;
 }
 
-.border-style-picker {
+.border-style-picker, .line-style-picker {
     display: flex;
     gap: 10px;
     margin: 10px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    flex-wrap: wrap;
 }
 
-.border-option {
+.border-option, .line-option {
     padding: 5px 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     cursor: pointer;
+    background: white;
+    transition: all 0.2s;
 }
 
-.border-option:hover {
+.border-option:hover, .line-option:hover {
     background: #f0f0f0;
 }
 
-.border-option.selected {
+.border-option.selected, .line-option.selected {
     background: #e0e0e0;
     border-color: #999;
+}
+
+.close-modal {
+    padding: 8px 16px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.close-modal:hover {
+    background: #d32f2f;
 }
