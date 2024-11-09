@@ -6,7 +6,7 @@ class WorkspaceElement {
         this.locked = false;
         this.position = { x: 0, y: 0 };
         this.connections = [];
-        this.borderStyle = 'solid'; // Add border style property
+        this.borderStyle = 'solid';
         this.element = this.createElement();
         this.setupEventListeners();
     }
@@ -14,31 +14,64 @@ class WorkspaceElement {
     createElement() {
         const element = document.createElement('div');
         element.className = 'draggable-element';
-        element.style.left = '0px';
-        element.style.top = '0px';
+        element.style.cssText = `
+            position: absolute;
+            cursor: move;
+            -webkit-user-select: none;
+            user-select: none;
+            min-width: 80px;
+            min-height: 80px;
+            background-color: var(--color-grey-5);
+            border-radius: var(--br-sm-2);
+            box-shadow: var(--box-shadow-1);
+            color: var(--color-grey-2);
+            transition: all .4s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
 
-        // Create shape element
         const shapeElement = document.createElement('div');
         shapeElement.className = `element-shape shape-${this.shape}`;
         shapeElement.style.setProperty('--element-color', this.color);
         element.appendChild(shapeElement);
 
-        // Add corner icons
         const icons = document.createElement('div');
         icons.className = 'element-icons';
+        icons.style.cssText = `
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: flex;
+            gap: 5px;
+            z-index: 2;
+        `;
         
         const iconTypes = [
-            { name: 'lock', svg: '<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>' },
-            { name: 'edit', svg: '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>' },
-            { name: 'copy', svg: '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>' },
-            { name: 'move', svg: '<svg viewBox="0 0 24 24"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>' },
-            { name: 'connect', svg: '<svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>' }
+            { name: 'lock', icon: 'fa-lock', title: 'Lock/Unlock' },
+            { name: 'edit', icon: 'fa-edit', title: 'Edit Text' },
+            { name: 'copy', icon: 'fa-copy', title: 'Duplicate' },
+            { name: 'move', icon: 'fa-arrows-alt', title: 'Move' },
+            { name: 'connect', icon: 'fa-link', title: 'Connect' }
         ];
 
-        iconTypes.forEach(icon => {
+        iconTypes.forEach(({name, icon, title}) => {
             const iconElement = document.createElement('div');
-            iconElement.className = `element-icon ${icon.name}-icon`;
-            iconElement.innerHTML = icon.svg;
+            iconElement.className = `element-icon ${name}-icon`;
+            iconElement.title = title;
+            iconElement.innerHTML = `<i class="fas ${icon}"></i>`;
+            iconElement.style.cssText = `
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: var(--color-grey-4);
+                color: var(--color-grey-2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all .4s ease-in-out;
+            `;
             icons.appendChild(iconElement);
         });
 
@@ -51,12 +84,26 @@ class WorkspaceElement {
         let startX, startY, initialX, initialY;
         let isConnecting = false;
 
+        this.element.addEventListener('mouseenter', () => {
+            if (!this.locked) {
+                this.element.style.transform = 'translateY(-5px)';
+                this.element.style.boxShadow = '1px 4px 15px rgba(0,0,0,0.32)';
+            }
+        });
+
+        this.element.addEventListener('mouseleave', () => {
+            if (!this.locked) {
+                this.element.style.transform = 'translateY(0)';
+                this.element.style.boxShadow = 'var(--box-shadow-1)';
+            }
+        });
+
         const onMouseDown = (e) => {
             if (this.locked) return;
             
-            const target = e.target;
-            if (target.closest('.element-icon')) {
-                const iconType = Array.from(target.closest('.element-icon').classList)
+            const target = e.target.closest('.element-icon');
+            if (target) {
+                const iconType = Array.from(target.classList)
                     .find(cls => cls.endsWith('-icon'))
                     ?.replace('-icon', '');
                 
@@ -109,13 +156,9 @@ class WorkspaceElement {
             }
         };
 
-        const onMouseUp = (e) => {
+        const onMouseUp = () => {
             isDragging = false;
             if (isConnecting) {
-                const targetElement = this.findTargetElement(e.clientX, e.clientY);
-                if (targetElement && targetElement !== this) {
-                    this.createConnection(targetElement);
-                }
                 this.removeTempConnection();
                 isConnecting = false;
             }
@@ -124,70 +167,12 @@ class WorkspaceElement {
         this.element.addEventListener('mousedown', onMouseDown);
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
-
-        if (this.type === 'tooltip') {
-            this.setupTooltip();
-        } else if (this.type === 'modal') {
-            this.setupModal();
-        }
-    }
-
-    startConnection() {
-        const tempLine = document.createElement('div');
-        tempLine.className = 'connection-line temp-connection';
-        document.body.appendChild(tempLine);
-        this.tempConnection = tempLine;
-    }
-
-    updateTempConnection(mouseX, mouseY) {
-        if (!this.tempConnection) return;
-
-        const rect = this.element.getBoundingClientRect();
-        const startX = rect.left + rect.width / 2;
-        const startY = rect.top + rect.height / 2;
-
-        const angle = Math.atan2(mouseY - startY, mouseX - startX) * 180 / Math.PI;
-        const length = Math.sqrt(Math.pow(mouseX - startX, 2) + Math.pow(mouseY - startY, 2));
-
-        this.tempConnection.style.width = `${length}px`;
-        this.tempConnection.style.left = `${startX}px`;
-        this.tempConnection.style.top = `${startY}px`;
-        this.tempConnection.style.transform = `rotate(${angle}deg)`;
-    }
-
-    removeTempConnection() {
-        if (this.tempConnection) {
-            this.tempConnection.remove();
-            this.tempConnection = null;
-        }
-    }
-
-    findTargetElement(x, y) {
-        const elements = document.elementsFromPoint(x, y);
-        for (const element of elements) {
-            const workspaceElement = element.closest('.draggable-element');
-            if (workspaceElement && workspaceElement !== this.element) {
-                return workspaceElement.__workspaceElement;
-            }
-        }
-        return null;
-    }
-
-    createConnection(target) {
-        const line = document.createElement('div');
-        line.className = `connection-line ${this.workspace.selectedLineStyle || 'solid'}`;
-        document.body.appendChild(line);
-
-        this.connections.push({ line, target });
-        target.connections.push({ line, target: this });
-
-        this.updateConnectionLine(line, this, target);
     }
 
     toggleLock() {
         this.locked = !this.locked;
         const lockIcon = this.element.querySelector('.lock-icon');
-        lockIcon.classList.toggle('locked', this.locked);
+        lockIcon.style.color = this.locked ? 'var(--color-secondary)' : 'var(--color-grey-2)';
     }
 
     enableEditing() {
@@ -196,9 +181,17 @@ class WorkspaceElement {
         const textElement = document.createElement('div');
         textElement.contentEditable = true;
         textElement.className = 'editable-text';
-        textElement.style.minWidth = '100px';
-        textElement.style.minHeight = '20px';
-        textElement.style.padding = '5px';
+        textElement.style.cssText = `
+            min-width: 100px;
+            min-height: 20px;
+            padding: 0.5rem;
+            color: var(--color-grey-2);
+            background: var(--color-grey-5);
+            border-radius: var(--br-sm-2);
+            margin-top: 0.5rem;
+            outline: none;
+            border: 1px solid var(--color-grey-4);
+        `;
         
         this.element.appendChild(textElement);
         textElement.focus();
@@ -218,50 +211,42 @@ class WorkspaceElement {
         this.element.parentNode.appendChild(clone.element);
     }
 
-    setupTooltip() {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip-content';
-        tooltip.textContent = 'Double click to edit tooltip content';
-        
-        this.element.addEventListener('mouseover', () => {
-            if (!this.locked) {
-                tooltip.style.display = 'block';
-                tooltip.style.left = `${this.position.x + 100}px`;
-                tooltip.style.top = `${this.position.y}px`;
-            }
-        });
-
-        this.element.addEventListener('mouseout', () => {
-            tooltip.style.display = 'none';
-        });
-
-        document.body.appendChild(tooltip);
+    startConnection() {
+        const line = document.createElement('div');
+        line.className = 'connection-line';
+        line.style.cssText = `
+            position: absolute;
+            height: 2px;
+            background: var(--color-secondary);
+            transform-origin: left center;
+            pointer-events: none;
+            z-index: 1;
+        `;
+        document.body.appendChild(line);
+        this.tempConnection = line;
     }
 
-    setupModal() {
-        this.element.addEventListener('click', () => {
-            if (this.locked) return;
-            
-            const modal = document.createElement('div');
-            modal.className = 'modal-window';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3>Modal Window</h3>
-                    <div class="modal-workspace"></div>
-                    <button class="close-modal">Close</button>
-                </div>
-            `;
+    updateTempConnection(mouseX, mouseY) {
+        if (!this.tempConnection) return;
+        
+        const rect = this.element.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2;
+        const startY = rect.top + rect.height / 2;
+        
+        const angle = Math.atan2(mouseY - startY, mouseX - startX);
+        const length = Math.sqrt(Math.pow(mouseX - startX, 2) + Math.pow(mouseY - startY, 2));
+        
+        this.tempConnection.style.width = `${length}px`;
+        this.tempConnection.style.left = `${startX}px`;
+        this.tempConnection.style.top = `${startY}px`;
+        this.tempConnection.style.transform = `rotate(${angle}rad)`;
+    }
 
-            modal.querySelector('.close-modal').addEventListener('click', () => {
-                modal.remove();
-            });
-
-            document.body.appendChild(modal);
-            modal.style.display = 'block';
-
-            // Create a new workspace inside the modal
-            new Workspace(modal.querySelector('.modal-workspace'));
-        });
+    removeTempConnection() {
+        if (this.tempConnection) {
+            this.tempConnection.remove();
+            this.tempConnection = null;
+        }
     }
 
     updateConnections() {
@@ -288,11 +273,6 @@ class WorkspaceElement {
         line.style.top = `${sourceY}px`;
         line.style.transform = `rotate(${angle}deg)`;
     }
-
-    setBorderStyle(style) {
-        this.borderStyle = style;
-        this.element.querySelector('.element-shape').style.borderStyle = style;
-    }
 }
 
 class Workspace {
@@ -300,111 +280,320 @@ class Workspace {
         this.container = container;
         this.elements = [];
         this.selectedLineStyle = 'solid';
+        this.selectedColor = '#FF0000';
+        this.selectedShape = 'square';
         this.init();
     }
 
     init() {
+        this.setupStyles();
         this.createToolbar();
         this.setupEventListeners();
+        this.setupThemeListener();
+    }
+
+    setupStyles() {
+        const styleSheet = document.createElement("style");
+        styleSheet.textContent = `
+            .workspace-container {
+                padding-top: 3.5rem;
+                padding-bottom: 3.5rem;
+                width: calc(100% - 10%);
+                margin: 0 auto;
+                min-height: calc(100vh - 7rem);
+            }
+
+            .workspace-panel {
+                width: 100%;
+                height: calc(100vh - 200px);
+                background: var(--color-primary);
+                border: 1px solid var(--color-grey-4);
+                border-radius: var(--br-sm-2);
+                box-shadow: var(--box-shadow-1);
+                position: relative;
+                overflow: hidden;
+                transition: all .4s ease-in-out;
+            }
+
+            .element-toolbar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 200px;
+                height: 100%;
+                background: var(--color-grey-5);
+                border-right: 1px solid var(--color-grey-4);
+                padding: 1rem;
+                z-index: 10;
+                transition: all .4s ease-in-out;
+            }
+
+            .toolbar-section {
+                margin-bottom: 2rem;
+            }
+
+            .section-title {
+                color: var(--color-grey-2);
+                font-size: 1rem;
+                margin-bottom: 1rem;
+                text-transform: uppercase;
+            }
+
+            .shape-items, .color-items, .border-items {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            .color-items {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .element-shape {
+                width: 60px;
+                height: 60px;
+                margin: 10px;
+                transition: all .4s ease-in-out;
+                border: 2px solid var(--color-grey-4);
+            }
+
+            .shape-square { }
+            
+            .shape-circle {
+                border-radius: 50%;
+            }
+            
+            .shape-triangle {
+                clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            }
+            
+            .shape-pentagon {
+                clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            }
+
+            .connection-line {
+                position: absolute;
+                height: 2px;
+                background: var(--color-secondary);
+                z-index: 1;
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    }
+
+    setupThemeListener() {
+        const themeBtn = document.querySelector('.theme-btn');
+        if (themeBtn) {
+            themeBtn.addEventListener('click', () => {
+                requestAnimationFrame(() => {
+                    Array.from(document.querySelectorAll('.draggable-element')).forEach(element => {
+                        element.style.backgroundColor = 'var(--color-grey-5)';
+                        element.style.color = 'var(--color-grey-2)';
+                    });
+                });
+            });
+        }
     }
 
     createToolbar() {
         const toolbar = document.createElement('div');
         toolbar.className = 'element-toolbar';
 
-        const shapes = ['square', 'circle', 'triangle', 'pentagon'];
-        const colors = ['#FF0000', '#FFA500', '#FFFF00', '#9ACD32', '#008000', 
-                       '#00CED1', '#0000FF', '#4B0082', '#800080', '#FF00FF'];
-        const borderStyles = ['solid', 'dashed', 'dotted', 'double'];
-        const lineStyles = ['solid', 'dashed', 'dotted', 'arrow'];
+        const sections = [
+            {
+                title: 'Shapes',
+                items: ['square', 'circle', 'triangle', 'pentagon'],
+                type: 'shape'
+            },
+            {
+                title: 'Colors',
+                items: ['#FF0000', '#FFA500', '#FFFF00', '#9ACD32', '#008000', 
+                       '#00CED1', '#0000FF', '#4B0082', '#800080', '#FF00FF'],
+                type: 'color'
+            },
+            {
+                title: 'Border Styles',
+                items: ['solid', 'dashed', 'dotted', 'double'],
+                type: 'border'
+            }
+        ];
 
-        // Add shape options
-        shapes.forEach(shape => {
-            const shapeElement = document.createElement('div');
-            shapeElement.className = `element-shape shape-${shape}`;
-            shapeElement.dataset.shape = shape;
-            toolbar.appendChild(shapeElement);
+        sections.forEach(section => {
+            const sectionEl = this.createToolbarSection(section);
+            toolbar.appendChild(sectionEl);
         });
-
-        // Add color picker
-        const colorPicker = document.createElement('div');
-        colorPicker.className = 'color-picker';
-        colors.forEach(color => {
-            const colorOption = document.createElement('div');
-            colorOption.className = 'color-option';
-            colorOption.style.backgroundColor = color;
-            colorOption.dataset.color = color;
-            colorPicker.appendChild(colorOption);
-        });
-        toolbar.appendChild(colorPicker);
-
-        // Add border style picker
-        const borderPicker = document.createElement('div');
-        borderPicker.className = 'border-style-picker';
-        borderStyles.forEach(style => {
-            const borderOption = document.createElement('div');
-            borderOption.className = 'border-option';
-            borderOption.textContent = style;
-            borderOption.dataset.borderStyle = style;
-            borderPicker.appendChild(borderOption);
-        });
-        toolbar.appendChild(borderPicker);
-
-        // Add line style picker
-        const linePicker = document.createElement('div');
-        linePicker.className = 'line-style-picker';
-        lineStyles.forEach(style => {
-            const lineOption = document.createElement('div');
-            lineOption.className = 'line-option';
-            lineOption.textContent = style;
-            lineOption.dataset.lineStyle = style;
-            linePicker.appendChild(lineOption);
-        });
-        toolbar.appendChild(linePicker);
 
         this.container.appendChild(toolbar);
     }
 
-    setupEventListeners() {
-        this.container.addEventListener('click', (e) => {
-            const shape = e.target.closest('.element-shape');
-            const colorOption = e.target.closest('.color-option');
-            const borderOption = e.target.closest('.border-option');
-            const lineOption = e.target.closest('.line-option');
+    createToolbarSection({ title, items, type }) {
+        const section = document.createElement('div');
+        section.className = 'toolbar-section';
+        
+        const titleEl = document.createElement('h4');
+        titleEl.className = 'section-title';
+        titleEl.textContent = title;
+        section.appendChild(titleEl);
 
-            if (shape) {
-                const selectedColor = this.container.querySelector('.color-option.selected')?.dataset.color || '#FF0000';
-                this.createNewElement('tooltip', shape.dataset.shape, selectedColor);
-            } else if (colorOption) {
-                this.container.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
-                colorOption.classList.add('selected');
-            } else if (borderOption) {
-                this.container.querySelectorAll('.border-option').forEach(opt => opt.classList.remove('selected'));
-                borderOption.classList.add('selected');
-                this.selectedBorderStyle = borderOption.dataset.borderStyle;
-            } else if (lineOption) {
-                this.container.querySelectorAll('.line-option').forEach(opt => opt.classList.remove('selected'));
-                lineOption.classList.add('selected');
-                this.selectedLineStyle = lineOption.dataset.lineStyle;
+        const itemsContainer = document.createElement('div');
+        itemsContainer.className = `${type}-items`;
+
+        items.forEach(item => {
+            const button = this.createToolbarButton(item, type);
+            itemsContainer.appendChild(button);
+        });
+
+        section.appendChild(itemsContainer);
+        return section;
+    }
+
+    createToolbarButton(item, type) {
+        const button = document.createElement('button');
+        button.className = 'main-btn';
+        button.style.cssText = `
+            padding: 0.5rem;
+            border: 1px solid var(--color-grey-4);
+            border-radius: var(--br-sm-2);
+            background: var(--color-grey-5);
+            color: var(--color-grey-2);
+            cursor: pointer;
+            transition: all .4s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
+        
+        if (type === 'color') {
+            button.style.backgroundColor = item;
+            button.style.width = '30px';
+            button.style.height = '30px';
+            button.style.borderRadius = '50%';
+            button.style.padding = '0';
+        } else {
+            button.textContent = item;
+        }
+
+        button.addEventListener('click', () => {
+            if (type === 'shape') {
+                this.selectedShape = item;
+                this.createNewElement('tooltip', item, this.selectedColor);
+            } else if (type === 'color') {
+                this.selectedColor = item;
+                button.style.border = '2px solid var(--color-secondary)';
+                // Reset other color buttons
+                const otherButtons = button.parentElement.querySelectorAll('button');
+                otherButtons.forEach(btn => {
+                    if (btn !== button) {
+                        btn.style.border = '1px solid var(--color-grey-4)';
+                    }
+                });
+            } else if (type === 'border') {
+                this.selectedBorderStyle = item;
+                button.style.backgroundColor = 'var(--color-secondary)';
+                button.style.color = 'var(--color-primary)';
+                // Reset other border style buttons
+                const otherButtons = button.parentElement.querySelectorAll('button');
+                otherButtons.forEach(btn => {
+                    if (btn !== button) {
+                        btn.style.backgroundColor = 'var(--color-grey-5)';
+                        btn.style.color = 'var(--color-grey-2)';
+                    }
+                });
             }
         });
+
+        button.addEventListener('mouseenter', () => {
+            if (type !== 'color' || this.selectedColor !== item) {
+                button.style.transform = 'translateY(-3px)';
+                button.style.boxShadow = 'var(--box-shadow-1)';
+            }
+        });
+
+        button.addEventListener('mouseleave', () => {
+            if (type !== 'color' || this.selectedColor !== item) {
+                button.style.transform = 'translateY(0)';
+                button.style.boxShadow = 'none';
+            }
+        });
+
+        return button;
     }
 
     createNewElement(type, shape, color) {
         const element = new WorkspaceElement(type, shape, color);
         element.workspace = this;
         element.element.__workspaceElement = element;
+
+        // Position new element in view
+        const toolbar = this.container.querySelector('.element-toolbar');
+        const toolbarWidth = toolbar.offsetWidth;
+        element.position.x = toolbarWidth + 50;
+        element.position.y = 50;
+        element.element.style.left = `${element.position.x}px`;
+        element.element.style.top = `${element.position.y}px`;
+
         if (this.selectedBorderStyle) {
-            element.setBorderStyle(this.selectedBorderStyle);
+            element.element.querySelector('.element-shape').style.borderStyle = this.selectedBorderStyle;
         }
+
         this.elements.push(element);
         this.container.appendChild(element.element);
     }
+
+    setupEventListeners() {
+        // Prevent text selection during drag
+        this.container.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.draggable-element')) {
+                e.preventDefault();
+            }
+        });
+
+        // Handle workspace scrolling
+        let isScrolling = false;
+        let scrollStartX, scrollStartY;
+        let initialScrollLeft, initialScrollTop;
+
+        this.container.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('.draggable-element') && !e.target.closest('.element-toolbar')) {
+                isScrolling = true;
+                scrollStartX = e.pageX;
+                scrollStartY = e.pageY;
+                initialScrollLeft = this.container.scrollLeft;
+                initialScrollTop = this.container.scrollTop;
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isScrolling) {
+                const dx = e.pageX - scrollStartX;
+                const dy = e.pageY - scrollStartY;
+                this.container.scrollLeft = initialScrollLeft - dx;
+                this.container.scrollTop = initialScrollTop - dy;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isScrolling = false;
+        });
+
+        // Handle zoom (if needed)
+        this.container.addEventListener('wheel', (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                const scale = e.deltaY > 0 ? 0.9 : 1.1;
+                this.elements.forEach(element => {
+                    const currentScale = element.element.style.transform.match(/scale\((.*?)\)/) || [null, '1'];
+                    const newScale = parseFloat(currentScale[1]) * scale;
+                    element.element.style.transform = `scale(${newScale})`;
+                });
+            }
+        });
+    }
 }
 
-// Initialize the workspace when the page loads
+// Initialize workspace when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    const workspaceContainer = document.querySelector('.workspace-container');
+    const workspaceContainer = document.querySelector('.workspace-panel');
     if (workspaceContainer) {
         new Workspace(workspaceContainer);
     }
