@@ -19,6 +19,7 @@
              Web Design, Web app, Web app development, Version control, Git, Github, Gitlab, Gitlab CI/CD, Github Actions," />
     <title>Portfolio</title>
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/workspace-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -1343,13 +1344,14 @@
             </div>
         </section>
 
-        <section class="container contact" id="onlineide">
-            <div class="contact-container">
+        <section class="container workspace" id="workspace">
+            <div class="workspace-container">
                 <div class="main-title">
-                    <h2>CPP<span>IDE</span><span class="bg-text">Development</span></h2>
+                    <h2>Interactive<span>Workspace</span><span class="bg-text">Workspace</span></h2>
                 </div>
-                <div data-pym-src="https://www.jdoodle.com/embed/v1/282bf29a4fb85c42"></div>
-                <script src="https://www.jdoodle.com/assets/jdoodle-pym.min.js" type="text/javascript"> </script>
+                <div class="workspace-panel">
+                <!-- Workspace content will be dynamically added by JavaScript -->
+                </div>
             </div>
         </section>
 
@@ -1593,5 +1595,6 @@
         <i class="fas fa-adjust"></i>
     </div>
     <script src="app.js"></script>
+    <script src="workspace/js/workspace.js"></script>
 </body>
 </html>
