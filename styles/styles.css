@@ -840,11 +840,10 @@ section {
   align-self: flex-start;
   align-items: center;
   overflow: hidden;
-  background: none;  /* Makes button background transparent like anchor tags */
-  cursor: pointer;   /* Shows pointer cursor on hover */
-  font-family: inherit;  /* Maintains consistent font */
-  outline: none;     /* Removes default button outline */
-  padding: 0;       /* Removes default button padding */
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
 }
 }
 .main-btn .btn-text {
