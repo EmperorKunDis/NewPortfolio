@@ -1,0 +1,192 @@
+.workspace-panel {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+.element-toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+    z-index: 10;
+}
+
+.draggable-element {
+    position: absolute;
+    cursor: move;
+    -webkit-user-select: none;
+    user-select: none;
+    min-width: 80px;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.element-icons {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+.element-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.element-icon:hover {
+    background: #f0f0f0;
+}
+
+.element-shape {
+    width: 60px;
+    height: 60px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.element-shape:hover {
+    transform: scale(1.1);
+}
+
+.shape-square {
+    background: var(--element-color, #FF0000);
+}
+
+.shape-circle {
+    background: var(--element-color, #00CED1);
+    border-radius: 50%;
+}
+
+.shape-triangle {
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 52px solid var(--element-color, #FFFF00);
+    background: transparent;
+}
+
+.shape-pentagon {
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    background: var(--element-color, #4B0082);
+}
+
+.connection-line {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.connection-line.solid {
+    border-top: 2px solid #000;
+}
+
+.connection-line.dashed {
+    border-top: 2px dashed #000;
+}
+
+.connection-line.dotted {
+    border-top: 2px dotted #000;
+}
+
+.connection-line.arrow::after {
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: -6px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid #000;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+}
+
+.tooltip-content {
+    position: absolute;
+    background: white;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+    display: none;
+    max-width: 200px;
+}
+
+.modal-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: none;
+}
+
+.color-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.color-option {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+}
+
+.color-option.selected {
+    border-color: #000;
+}
+
+.border-style-picker {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.border-option {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.border-option:hover {
+    background: #f0f0f0;
+}
+
+.border-option.selected {
+    background: #e0e0e0;
+    border-color: #999;
+}
