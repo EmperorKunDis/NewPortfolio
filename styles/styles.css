@@ -840,6 +840,11 @@ section {
   align-self: flex-start;
   align-items: center;
   overflow: hidden;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  padding: 0;
 }
 .main-btn .btn-text {
   padding: 0 2rem;
