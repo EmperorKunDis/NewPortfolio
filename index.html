@@ -24,6 +24,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script type="importmap">
+        {
+            "imports": {
+                "react": "https://esm.sh/react@18.2.0",
+                "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+                "@tldraw/tldraw": "https://esm.sh/@tldraw/tldraw@2.0.0-alpha.17"
+            }
+        }
+        </script>
 </head>
 <body class="main-content">
     <header class="container header active" id="home">
@@ -1349,7 +1358,7 @@
                 <div class="main-title">
                     <h2>Interactive<span>Workspace</span><span class="bg-text">Knowledge</span></h2>
                 </div>
-                
+                <div id="tldraw-container"></div>
             </div>
         </section>
 
@@ -1591,6 +1600,6 @@
             <i class="fas fa-adjust"></i>
         </div>
         <script src="app.js"></script>
-        <script src="workspace/js/workspace.js"></script>
+        <script type="module" src="workspace/js/workspace.js"></script>
     </body>
 </html>
