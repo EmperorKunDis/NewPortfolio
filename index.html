@@ -1354,11 +1354,16 @@
         </section>
 
         <section class="container workspace" id="workspace">
-            <div class="workspace-container">
-                <div class="main-title">
-                    <h2>Interactive<span>Workspace</span><span class="bg-text">Knowledge</span></h2>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>Chat with AI</h2>
                 </div>
-                <div id="tldraw-container"></div>
+                <div class="messages-container" id="messages"></div>
+                <div class="input-area">
+                    <input type="text" class="message-input" id="messageInput" placeholder="Type a message...">
+                        <button class="record-button" id="recordButton">Record</button>
+                        <button class="send-button" id="sendButton">Send</button>
+                </div>
             </div>
         </section>
 
