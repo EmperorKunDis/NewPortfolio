@@ -1365,6 +1365,7 @@
                         <button class="send-button" id="sendButton">Send</button>
                 </div>
             </div>
+            <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/style.css" rel="stylesheet" />
         </section>
 
         
@@ -1606,5 +1607,7 @@
         </div>
         <script src="app.js"></script>
         <script type="module" src="workspace/js/workspace.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/style.css" rel="stylesheet" />
+        <script type="module">import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/chat.bundle.es.js';createChat({webhookUrl: 'YOUR_PRODUCTION_WEBHOOK_URL'});</script> 
     </body>
 </html>
